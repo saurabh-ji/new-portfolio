@@ -1,26 +1,23 @@
-#tage 1: Build environment
-FROM node:18-alpine as builder
+# Use official lightweight Nginx image
+FROM nginx:1.25-alpine
 
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
+# Set working directory
+WORKDIR /usr/share/nginx/html
 
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d
+
+# Copy all static files (HTML, CSS, JS, images)
 COPY . .
-# If you're using a build tool like Webpack or Parcel
-# RUN npm run build
 
-# Stage 2: Production image
-FROM nginx:1.23-alpine
+# Set proper permissions
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
 
-# Copy built assets from builder
-COPY --from=builder /app /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy individual HTML files and assets
-COPY index.html about.html projects.html contact.html /usr/share/nginx/html/
-COPY assets /usr/share/nginx/html/assets/
-
-# Expose port 5000
+# Expose port 5000 (matches your APP_PORT in Jenkins)
 EXPOSE 5000
 
 # Start Nginx
