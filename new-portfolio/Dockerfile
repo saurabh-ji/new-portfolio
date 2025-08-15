@@ -1,12 +1,27 @@
-FROM php:8.1-apache
+#tage 1: Build environment
+FROM node:18-alpine as builder
 
-RUN a2enmod rewrite
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
 
-COPY . /var/www/html/
+COPY . .
+# If you're using a build tool like Webpack or Parcel
+# RUN npm run build
 
-RUN chown -R www-data:www-data /var/www/html
+# Stage 2: Production image
+FROM nginx:1.23-alpine
 
-# Change Apache to listen on 5000
-RUN sed -i 's/80/5000/g' /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
+# Copy built assets from builder
+COPY --from=builder /app /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 5000
+# Copy individual HTML files and assets
+COPY index.html about.html projects.html contact.html /usr/share/nginx/html/
+COPY assets /usr/share/nginx/html/assets/
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
