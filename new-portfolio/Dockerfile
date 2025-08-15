@@ -1,20 +1,12 @@
-FROM nginx:1.25-alpine  # Explicitly use Nginx
+FROM php:8.1-apache
 
-# Install curl for debugging
-RUN apk add --no-cache curl
+RUN a2enmod rewrite
 
-# Remove default config
-RUN rm /etc/nginx/conf.d/default.conf
+COPY . /var/www/html/
 
-# Add your custom config
-COPY nginx.conf /etc/nginx/conf.d/
+RUN chown -R www-data:www-data /var/www/html
 
-# Copy website files
-COPY . /usr/share/nginx/html/
-
-# Set permissions
-RUN chown -R nginx:nginx /usr/share/nginx/html && \
-    chmod -R 755 /usr/share/nginx/html
+# Change Apache to listen on 5000
+RUN sed -i 's/80/5000/g' /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 5000
-CMD ["nginx", "-g", "daemon off;"]  # Explicit Nginx command
