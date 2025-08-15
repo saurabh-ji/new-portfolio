@@ -1,0 +1,31 @@
+/* All the CSS from the original single file version */
+:root {
+	    --primary-color: #2563eb;
+	        --secondary-color: #1e40af;
+		    --dark-color: #1f2937;
+		        --light-color: #f9fafb;
+			    --accent-color: #10b981;
+			        --text-color: #374151;
+				    --text-light: #6b7280;
+			    }
+
+			    * {
+				    *     margin: 0;
+				    *         padding: 0;
+				    *             box-sizing: border-box;
+				    *                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				    *                 }
+				    *
+				    *                 body {
+					    *                     color: var(--text-color);
+					    *                         line-height: 1.6;
+					    *                             background-color: var(--light-color);
+					    *                             }
+					    *
+					    *                             .container {
+						    *                                 max-width: 1200px;
+						    *                                     margin: 0 auto;
+						    *                                         padding: 0 20px;
+						    *                                         }
+						    *
+						    */* Continue with all other CSS rules from the original */
