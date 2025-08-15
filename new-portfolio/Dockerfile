@@ -20,8 +20,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY index.html about.html projects.html contact.html /usr/share/nginx/html/
 COPY assets /usr/share/nginx/html/assets/
 
-# Expose port 80
-EXPOSE 80
+# Expose port 5000
+EXPOSE 5000
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
